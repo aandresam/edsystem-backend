@@ -2,11 +2,11 @@ package com.german.edsystem.infrastructure.repository;
 
 import com.german.edsystem.models.Alumno;
 
-import java.util.List;
+import java.util.*;
 
 public interface AlumnoRepository {
-    Alumno getAlumnoById(Integer id);
-    List<Alumno> getAlumnos();
+    Optional<Alumno> getAlumnoById(Integer id);
+    Iterable<Alumno> getAlumnos();
     Alumno saveAlumno(Alumno alumno);
     void deleteAlumnoById(Integer id);
 }

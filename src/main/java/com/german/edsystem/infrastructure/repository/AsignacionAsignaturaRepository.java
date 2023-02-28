@@ -2,11 +2,11 @@ package com.german.edsystem.infrastructure.repository;
 
 import com.german.edsystem.models.AsignacionAsignatura;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface AsignacionAsignaturaRepository {
-    AsignacionAsignatura getAsignacionById(Integer id);
-    List<AsignacionAsignatura> getAsignaciones();
+    Optional<AsignacionAsignatura> getAsignacionById(Integer id);
+    Iterable<AsignacionAsignatura> getAsignaciones();
     AsignacionAsignatura saveAsignacion(AsignacionAsignatura asignacion);
     void deleteAsignacionById(Integer id);
 }

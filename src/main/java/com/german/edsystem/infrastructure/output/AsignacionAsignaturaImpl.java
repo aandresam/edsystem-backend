@@ -6,20 +6,22 @@ import com.german.edsystem.models.AsignacionAsignatura;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class AsignacionAsignaturaImpl implements AsignacionAsignaturaRepository {
     private final AsignacionAsignaturaRepositoryJpa asignacionAsignaturaRepositoryJpa;
     @Override
-    public List<AsignacionAsignatura> getAsignaciones() {
+    public Iterable<AsignacionAsignatura> getAsignaciones() {
         return this.asignacionAsignaturaRepositoryJpa.findAll();
     }
 
     @Override
-    public AsignacionAsignatura getAsignacionById(Integer id) {
-        return this.asignacionAsignaturaRepositoryJpa.findById(id).orElse(null);
+    public Optional<AsignacionAsignatura> getAsignacionById(Integer id) {
+        AsignacionAsignatura asignacion = this.asignacionAsignaturaRepositoryJpa
+                .findById(id).orElse(null);
+        return Optional.ofNullable(asignacion);
     }
 
     @Override

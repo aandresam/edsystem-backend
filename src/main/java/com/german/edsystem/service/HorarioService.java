@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -14,12 +14,12 @@ import java.util.List;
 public class HorarioService implements IHorarioService {
     private final HorarioRepository horarioRepository;
     @Override
-    public List<Horario> getHorarios() {
+    public Iterable<Horario> getHorarios() {
         return this.horarioRepository.getHorarios();
     }
 
     @Override
-    public Horario getHorario(Integer id) {
+    public Optional<Horario> getHorario(Integer id) {
         return this.horarioRepository.getHorarioById(id);
     }
 

@@ -2,11 +2,12 @@ package com.german.edsystem.infrastructure.output;
 
 import com.german.edsystem.infrastructure.input.AsignacionCursoRepositoryJpa;
 import com.german.edsystem.infrastructure.repository.AsignacionCursoRepository;
+import com.german.edsystem.models.AsignacionAsignatura;
 import com.german.edsystem.models.AsignacionCurso;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -14,12 +15,13 @@ public class AsignacionCursoImpl implements AsignacionCursoRepository {
 
     private final AsignacionCursoRepositoryJpa asignacionCursoRepositoryJpa;
     @Override
-    public List<AsignacionCurso> getAsignaciones() {
+    public Iterable<AsignacionCurso> getAsignaciones() {
         return this.asignacionCursoRepositoryJpa.findAll();
     }
     @Override
-    public AsignacionCurso getAsignacionById(Integer id) {
-        return this.asignacionCursoRepositoryJpa.findById(id).orElse(null);
+    public Optional<AsignacionCurso> getAsignacionById(Integer id) {
+        AsignacionCurso asignacion =  this.asignacionCursoRepositoryJpa.findById(id).orElse(null);
+        return Optional.ofNullable(asignacion);
     }
     @Override
     public AsignacionCurso saveAsignacion(AsignacionCurso asignacion) {

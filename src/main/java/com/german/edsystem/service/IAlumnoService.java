@@ -2,15 +2,15 @@ package com.german.edsystem.service;
 
 import com.german.edsystem.models.Alumno;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface IAlumnoService {
 
-    public List<Alumno> getAlumnos();
+    Iterable<Alumno> getAlumnos();
 
-    public Alumno getAlumnoById(Integer id);
+    Optional<Alumno> getAlumnoById(Integer id);
 
-    public Alumno saveAlumno(Alumno alumno);
+    Alumno saveAlumno(Alumno alumno);
 
-    public void deleteAlumnoById(Integer id);
+    void deleteAlumnoById(Integer id);
 }

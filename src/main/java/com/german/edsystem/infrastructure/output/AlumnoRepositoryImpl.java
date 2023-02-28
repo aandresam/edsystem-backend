@@ -6,7 +6,7 @@ import com.german.edsystem.models.Alumno;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -14,12 +14,13 @@ public class AlumnoRepositoryImpl implements AlumnoRepository {
     private final AlumnoRepositoryJpa alumnoRepositoryJpa;
 
     @Override
-    public List<Alumno> getAlumnos() {
+    public Iterable<Alumno> getAlumnos() {
         return this.alumnoRepositoryJpa.findAll();
     }
     @Override
-    public Alumno getAlumnoById(Integer id) {
-        return this.alumnoRepositoryJpa.findById(id).orElse(null);
+    public Optional<Alumno> getAlumnoById(Integer id) {
+        Alumno alumno = this.alumnoRepositoryJpa.findById(id).orElse(null);
+        return Optional.ofNullable(alumno);
     }
     @Override
     public Alumno saveAlumno(Alumno alumno) {

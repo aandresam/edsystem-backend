@@ -2,15 +2,15 @@ package com.german.edsystem.service;
 
 import com.german.edsystem.models.Docente;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface IDocenteService {
 
-    public List<Docente> getDocentes();
+    Iterable<Docente> getDocentes();
 
-    public Docente getDocente(Integer id);
+    Optional<Docente> getDocente(Integer id);
 
-    public Docente saveDocente(Docente docente);
+    Docente saveDocente(Docente docente);
 
-    public void deleteDocenteById(Integer id);
+    void deleteDocenteById(Integer id);
 }

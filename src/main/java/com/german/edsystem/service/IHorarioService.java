@@ -2,14 +2,14 @@ package com.german.edsystem.service;
 
 import com.german.edsystem.models.Horario;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface IHorarioService {
-    public List<Horario> getHorarios();
+    Iterable<Horario> getHorarios();
 
-    public Horario getHorario(Integer id);
+    Optional<Horario> getHorario(Integer id);
 
-    public Horario saveHorario(Horario horario);
+    Horario saveHorario(Horario horario);
 
-    public void deleteHorarioById(Integer id);
+    void deleteHorarioById(Integer id);
 }

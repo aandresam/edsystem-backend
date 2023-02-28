@@ -1,5 +1,6 @@
 package com.german.edsystem.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class Usuario {
     @OneToOne
     private Rol rol;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Persona persona;
 }

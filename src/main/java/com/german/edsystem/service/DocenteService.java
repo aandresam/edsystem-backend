@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -21,12 +21,12 @@ public class DocenteService implements IDocenteService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<Docente> getDocentes() {
+    public Iterable<Docente> getDocentes() {
         return this.docenteRepository.getDocentes();
     }
 
     @Override
-    public Docente getDocente(Integer id) {
+    public Optional<Docente> getDocente(Integer id) {
         return this.docenteRepository.getDocenteById(id);
     }
 
@@ -47,10 +47,10 @@ public class DocenteService implements IDocenteService {
 
     public Usuario createUserForDocente(Docente docente) {
         Usuario usuario = new Usuario();
-        Rol rol = this.rolService.getRolById(2);
+        Optional<Rol> rol = this.rolService.getRolById(2);
         usuario.setUsername(docente.getContacto().getEmail());
         usuario.setPassword(this.passwordEncoder.encode(docente.getContacto().getTelefono()));
-        usuario.setRol(rol);
+        usuario.setRol(rol.orElse(null));
         usuario.setEnabled(true);
         usuario.setPersona(docente);
         return usuario;

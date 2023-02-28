@@ -5,6 +5,7 @@ import com.german.edsystem.service.IAlumnoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class AlumnoController {
         return new ResponseEntity<>(this.alumnoService.getAlumnos(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Alumno> encontrarAlumno(@PathVariable Integer id) {
         Alumno alumno = this.alumnoService.getAlumnoById(id);
         if(alumno == null) {
@@ -29,11 +31,13 @@ public class AlumnoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Alumno> agregarAlumno(@RequestBody Alumno alumno) {
         return new ResponseEntity<>(this.alumnoService.saveAlumno(alumno), HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Alumno> modificarAlumno(@RequestBody Alumno alumno) {
         Alumno existingAlumno = this.alumnoService.getAlumnoById(alumno.getId());
         if(existingAlumno == null) {

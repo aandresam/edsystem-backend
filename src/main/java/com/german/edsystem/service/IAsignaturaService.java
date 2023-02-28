@@ -2,14 +2,14 @@ package com.german.edsystem.service;
 
 import com.german.edsystem.models.Asignatura;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface IAsignaturaService {
-    public List<Asignatura> getAsignaturas();
+    Iterable<Asignatura> getAsignaturas();
 
-    public Asignatura getAsignatura(Integer id);
+    Optional<Asignatura> getAsignatura(Integer id);
 
-    public Asignatura saveAsignatura(Asignatura asignatura);
+    Asignatura saveAsignatura(Asignatura asignatura);
 
-    public void deleteAsignaturaById(Integer id);
+    void deleteAsignaturaById(Integer id);
 }

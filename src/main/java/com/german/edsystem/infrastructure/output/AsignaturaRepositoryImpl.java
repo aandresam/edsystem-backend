@@ -6,20 +6,21 @@ import com.german.edsystem.models.Asignatura;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class AsignaturaRepositoryImpl implements AsignaturaRepository {
     private final AsignaturaRepositoryJpa asignaturaRepositoryJpa;
     @Override
-    public List<Asignatura> getAsignaturas() {
+    public Iterable<Asignatura> getAsignaturas() {
         return this.asignaturaRepositoryJpa.findAll();
     }
 
     @Override
-    public Asignatura getAsignaturaById(Integer id) {
-        return this.asignaturaRepositoryJpa.findById(id).orElse(null);
+    public Optional<Asignatura> getAsignaturaById(Integer id) {
+        Asignatura asignatura = this.asignaturaRepositoryJpa.findById(id).orElse(null);
+        return Optional.ofNullable(asignatura);
     }
 
     @Override

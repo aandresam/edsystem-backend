@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -14,20 +14,18 @@ import java.util.List;
 public class AsignaturaService implements IAsignaturaService {
     private final AsignaturaRepository asignaturaRepository;
     @Override
-    public List<Asignatura> getAsignaturas() {
+    public Iterable<Asignatura> getAsignaturas() {
         return this.asignaturaRepository.getAsignaturas();
     }
 
     @Override
-    public Asignatura getAsignatura(Integer id) {
+    public Optional<Asignatura> getAsignatura(Integer id) {
         return this.asignaturaRepository.getAsignaturaById(id);
     }
-
     @Override
     public Asignatura saveAsignatura(Asignatura asignatura) {
         return this.asignaturaRepository.saveAsignatura(asignatura);
     }
-
     @Override
     public void deleteAsignaturaById(Integer id) {
         this.asignaturaRepository.deleteAsignaturaById(id);

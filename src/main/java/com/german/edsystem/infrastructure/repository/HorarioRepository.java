@@ -2,11 +2,11 @@ package com.german.edsystem.infrastructure.repository;
 
 import com.german.edsystem.models.Horario;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface HorarioRepository {
-    Horario getHorarioById(Integer id);
-    List<Horario> getHorarios();
+    Optional<Horario> getHorarioById(Integer id);
+    Iterable<Horario> getHorarios();
     Horario saveHorario(Horario horario);
     void deleteHorarioById(Integer id);
 }

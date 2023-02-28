@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -15,12 +15,12 @@ public class AsignacionAsignaturaService implements IAsignacionAsignaturaService
 
     private final AsignacionAsignaturaRepository asignacionAsignaturaRepository;
     @Override
-    public List<AsignacionAsignatura> getAsignaciones() {
+    public Iterable<AsignacionAsignatura> getAsignaciones() {
         return this.asignacionAsignaturaRepository.getAsignaciones();
     }
 
     @Override
-    public AsignacionAsignatura getAsignacionById(Integer id) {
+    public Optional<AsignacionAsignatura> getAsignacionById(Integer id) {
         return this.asignacionAsignaturaRepository.getAsignacionById(id);
     }
 

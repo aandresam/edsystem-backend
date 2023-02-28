@@ -6,7 +6,7 @@ import com.german.edsystem.models.Usuario;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -14,12 +14,12 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     private final UsuarioRepositoryJpa usuarioRepositoryJpa;
 
     @Override
-    public Usuario getUsuarioByUsername(String username) {
+    public Optional<Usuario> getUsuarioByUsername(String username) {
         return this.usuarioRepositoryJpa.findByUsername(username);
     }
 
     @Override
-    public List<Usuario> getUsuarios() {
+    public Iterable<Usuario> getUsuarios() {
         return this.usuarioRepositoryJpa.findAll();
     }
 

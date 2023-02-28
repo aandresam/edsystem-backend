@@ -2,11 +2,11 @@ package com.german.edsystem.infrastructure.repository;
 
 import com.german.edsystem.models.Asignatura;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface AsignaturaRepository {
-    Asignatura getAsignaturaById(Integer id);
-    List<Asignatura> getAsignaturas();
+    Optional<Asignatura> getAsignaturaById(Integer id);
+    Iterable<Asignatura> getAsignaturas();
     Asignatura saveAsignatura(Asignatura asignatura);
     void deleteAsignaturaById(Integer id);
 }

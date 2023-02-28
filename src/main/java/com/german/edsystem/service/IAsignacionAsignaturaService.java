@@ -2,15 +2,15 @@ package com.german.edsystem.service;
 
 import com.german.edsystem.models.AsignacionAsignatura;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface IAsignacionAsignaturaService {
 
-    public List<AsignacionAsignatura> getAsignaciones();
+    Iterable<AsignacionAsignatura> getAsignaciones();
 
-    public AsignacionAsignatura getAsignacionById(Integer id);
+    Optional<AsignacionAsignatura> getAsignacionById(Integer id);
 
-    public AsignacionAsignatura saveAsignacion(AsignacionAsignatura asignacionAsignatura);
+    AsignacionAsignatura saveAsignacion(AsignacionAsignatura asignacionAsignatura);
 
-    public void deleteAsignacionById(Integer asignacionAsignatura);
+    void deleteAsignacionById(Integer asignacionAsignatura);
 }

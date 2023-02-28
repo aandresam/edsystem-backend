@@ -6,7 +6,7 @@ import com.german.edsystem.models.Curso;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -14,13 +14,14 @@ public class CursoRepositoryImpl implements CursoRepository {
     private final CursoRepositoryJpa cursoRepositoryJpa;
 
     @Override
-    public List<Curso> getCursos() {
+    public Iterable<Curso> getCursos() {
         return this.cursoRepositoryJpa.findAll();
     }
 
     @Override
-    public Curso getCursoById(Integer id) {
-        return this.cursoRepositoryJpa.findById(id).orElse(null);
+    public Optional<Curso> getCursoById(Integer id) {
+        Curso curso = this.cursoRepositoryJpa.findById(id).orElse(null);
+        return Optional.ofNullable(curso);
     }
 
     @Override

@@ -2,11 +2,11 @@ package com.german.edsystem.service;
 
 import com.german.edsystem.models.Usuario;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface IUsuarioService {
-    Usuario getUsuarioByUsername(String username);
-    List<Usuario> getUsuarios();
+    Optional<Usuario> getUsuarioByUsername(String username);
+    Iterable<Usuario> getUsuarios();
     Usuario saveUsuario(Usuario usuario);
     void deleteUsuario(Usuario usuario);
 }

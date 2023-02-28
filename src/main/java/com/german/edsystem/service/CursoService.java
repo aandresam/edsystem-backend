@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -16,12 +16,12 @@ public class CursoService implements ICursoService {
     private final CursoRepository cursoRepository;
 
     @Override
-    public List<Curso> getCursos() {
+    public Iterable<Curso> getCursos() {
         return this.cursoRepository.getCursos();
     }
 
     @Override
-    public Curso getCurso(Integer id) {
+    public Optional<Curso> getCurso(Integer id) {
         return this.cursoRepository.getCursoById(id);
     }
 

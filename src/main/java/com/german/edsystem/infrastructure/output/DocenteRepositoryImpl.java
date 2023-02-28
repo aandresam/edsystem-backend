@@ -6,7 +6,7 @@ import com.german.edsystem.models.Docente;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -14,13 +14,14 @@ public class DocenteRepositoryImpl implements DocenteRepository {
     private final DocenteRepositoryJpa docenteRepositoryJpa;
 
     @Override
-    public List<Docente> getDocentes() {
+    public Iterable<Docente> getDocentes() {
         return this.docenteRepositoryJpa.findAll();
     }
 
     @Override
-    public Docente getDocenteById(Integer id) {
-        return this.docenteRepositoryJpa.findById(id).orElse(null);
+    public Optional<Docente> getDocenteById(Integer id) {
+        Docente docente = this.docenteRepositoryJpa.findById(id).orElse(null);
+        return Optional.ofNullable(docente);
     }
 
     @Override
