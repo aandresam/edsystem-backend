@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -15,14 +15,14 @@ public class DocenteController {
     private final IDocenteService docenteService;
 
     @GetMapping
-    public ResponseEntity<List<Docente>> getDocentes() {
+    public ResponseEntity<Iterable<Docente>> getDocentes() {
         return new ResponseEntity<>(docenteService.getDocentes(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Docente> getDocente(@PathVariable Integer id) {
-        Docente docente = docenteService.getDocente(id);
-        if (docente == null) {
+    public ResponseEntity<Optional<Docente>> getDocenteById(@PathVariable Integer id) {
+        Optional<Docente> docente = docenteService.getDocente(id);
+        if (docente.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(docente, HttpStatus.OK);
@@ -35,20 +35,20 @@ public class DocenteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Docente> updateDocente(@RequestBody Docente docente) {
-        Docente existingDocente = docenteService.getDocente(docente.getId());
-        if (existingDocente == null) {
+        Optional<Docente> existingDocente = docenteService.getDocente(docente.getId());
+        if (existingDocente.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingDocente.setNombre(docente.getNombre());
-        existingDocente.setApellido(docente.getApellido());
-        existingDocente.setContacto(docente.getContacto());
-        existingDocente.setDomicilio(docente.getDomicilio());
-        existingDocente.setFechaNacimiento(docente.getFechaNacimiento());
-        return new ResponseEntity<>(docenteService.saveDocente(existingDocente), HttpStatus.OK);
+        existingDocente.get().setNombre(docente.getNombre());
+        existingDocente.get().setApellido(docente.getApellido());
+        existingDocente.get().setContacto(docente.getContacto());
+        existingDocente.get().setDomicilio(docente.getDomicilio());
+        existingDocente.get().setFechaNacimiento(docente.getFechaNacimiento());
+        return new ResponseEntity<>(docenteService.saveDocente(existingDocente.get()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus deleteDocente(@PathVariable Integer id) {
+    public HttpStatus deleteDocenteById(@PathVariable Integer id) {
         docenteService.deleteDocenteById(id);
         return HttpStatus.NO_CONTENT;
     }

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -17,14 +17,14 @@ public class AlumnoController {
 
     private final IAlumnoService alumnoService;
     @GetMapping
-    public ResponseEntity<List<Alumno>> listarAlumnos() {
+    public ResponseEntity<Iterable<Alumno>> getAlumnos() {
         return new ResponseEntity<>(this.alumnoService.getAlumnos(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Alumno> encontrarAlumno(@PathVariable Integer id) {
-        Alumno alumno = this.alumnoService.getAlumnoById(id);
-        if(alumno == null) {
+    public ResponseEntity<Optional<Alumno>> getAlumnoById(@PathVariable Integer id) {
+        Optional<Alumno> alumno = this.alumnoService.getAlumnoById(id);
+        if(alumno.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(alumno, HttpStatus.OK);
@@ -32,27 +32,27 @@ public class AlumnoController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Alumno> agregarAlumno(@RequestBody Alumno alumno) {
+    public ResponseEntity<Alumno> createAlumno(@RequestBody Alumno alumno) {
         return new ResponseEntity<>(this.alumnoService.saveAlumno(alumno), HttpStatus.CREATED);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Alumno> modificarAlumno(@RequestBody Alumno alumno) {
-        Alumno existingAlumno = this.alumnoService.getAlumnoById(alumno.getId());
-        if(existingAlumno == null) {
+    public ResponseEntity<Alumno> updateAlumno(@RequestBody Alumno alumno) {
+        Optional<Alumno> existingAlumno = this.alumnoService.getAlumnoById(alumno.getId());
+        if(existingAlumno.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingAlumno.setNombre(alumno.getNombre());
-        existingAlumno.setApellido(alumno.getApellido());
-        existingAlumno.setContacto(alumno.getContacto());
-        existingAlumno.setDomicilio(alumno.getDomicilio());
-        existingAlumno.setFechaNacimiento(alumno.getFechaNacimiento());
-        return new ResponseEntity<>(this.alumnoService.saveAlumno(existingAlumno), HttpStatus.OK);
+        existingAlumno.get().setNombre(alumno.getNombre());
+        existingAlumno.get().setApellido(alumno.getApellido());
+        existingAlumno.get().setContacto(alumno.getContacto());
+        existingAlumno.get().setDomicilio(alumno.getDomicilio());
+        existingAlumno.get().setFechaNacimiento(alumno.getFechaNacimiento());
+        return new ResponseEntity<>(this.alumnoService.saveAlumno(existingAlumno.get()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus eliminarAlumno(@PathVariable Integer id) {
+    public HttpStatus deleteAlumnoById(@PathVariable Integer id) {
         this.alumnoService.deleteAlumnoById(id);
         return HttpStatus.NO_CONTENT;
     }

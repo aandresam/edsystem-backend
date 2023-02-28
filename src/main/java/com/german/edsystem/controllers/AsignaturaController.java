@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -17,14 +17,14 @@ public class AsignaturaController {
     private final IAsignaturaService asignaturaService;
 
     @GetMapping
-    public ResponseEntity<List<Asignatura>> getAsignaturas() {
+    public ResponseEntity<Iterable<Asignatura>> getAsignaturas() {
         return new ResponseEntity<>(asignaturaService.getAsignaturas(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Asignatura> getAsignatura(@PathVariable Integer id) {
-        Asignatura asignatura = asignaturaService.getAsignatura(id);
-        if (asignatura == null) {
+    public ResponseEntity<Optional<Asignatura>> getAsignaturaById(@PathVariable Integer id) {
+        Optional<Asignatura> asignatura = asignaturaService.getAsignatura(id);
+        if (asignatura.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(asignatura, HttpStatus.OK);
@@ -37,15 +37,15 @@ public class AsignaturaController {
 
     @PutMapping
     public ResponseEntity<Asignatura> updateAsignatura(@RequestBody Asignatura asignatura) {
-        Asignatura existingAsignatura = asignaturaService.getAsignatura(asignatura.getIdAsignatura());
-        if (existingAsignatura == null) {
+        Optional<Asignatura> existingAsignatura = asignaturaService.getAsignatura(asignatura.getIdAsignatura());
+        if (existingAsignatura.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingAsignatura.setNombre(asignatura.getNombre());
-        return new ResponseEntity<>(asignaturaService.saveAsignatura(existingAsignatura), HttpStatus.OK);
+        existingAsignatura.get().setNombre(asignatura.getNombre());
+        return new ResponseEntity<>(asignaturaService.saveAsignatura(existingAsignatura.get()), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public HttpStatus deleteAsignatura(@PathVariable Integer id) {
+    public HttpStatus deleteAsignaturaById(@PathVariable Integer id) {
         asignaturaService.deleteAsignaturaById(id);
         return HttpStatus.NO_CONTENT;
     }

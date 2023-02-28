@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -16,14 +16,14 @@ public class AsignacionCursoController {
     private final IAsignacionCursoService asignacionCursoService;
 
     @GetMapping
-    public ResponseEntity<List<AsignacionCurso>> getAsignaciones() {
+    public ResponseEntity<Iterable<AsignacionCurso>> getAsignaciones() {
         return new ResponseEntity<>(asignacionCursoService.getAsignaciones(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AsignacionCurso> getAsignacion(@PathVariable("id") Integer id) {
-        AsignacionCurso asignacion = asignacionCursoService.getAsignacion(id);
-        if (asignacion == null) {
+    public ResponseEntity<Optional<AsignacionCurso>> getAsignacionById(@PathVariable("id") Integer id) {
+        Optional<AsignacionCurso> asignacion = asignacionCursoService.getAsignacion(id);
+        if (asignacion.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(asignacion, HttpStatus.OK);
@@ -37,19 +37,19 @@ public class AsignacionCursoController {
 
     @PutMapping
     public ResponseEntity<AsignacionCurso> updateAsignacion(@RequestBody AsignacionCurso asignacion){
-        AsignacionCurso existingAsignacion = asignacionCursoService.getAsignacion(asignacion.getIdAsignacion());
-        if (existingAsignacion == null) {
+        Optional<AsignacionCurso> existingAsignacion = asignacionCursoService.getAsignacion(asignacion.getIdAsignacion());
+        if (existingAsignacion.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingAsignacion.setDocente(asignacion.getDocente());
-        existingAsignacion.setAlumno(asignacion.getAlumno());
-        existingAsignacion.setHorario(asignacion.getHorario());
+        existingAsignacion.get().setDocente(asignacion.getDocente());
+        existingAsignacion.get().setAlumno(asignacion.getAlumno());
+        existingAsignacion.get().setHorario(asignacion.getHorario());
         return new ResponseEntity<>(asignacionCursoService
-                .saveAsignacion(existingAsignacion), HttpStatus.OK);
+                .saveAsignacion(existingAsignacion.get()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public HttpStatus deleteAsignacion(@PathVariable("id") Integer id) {
+    public HttpStatus deleteAsignacionById(@PathVariable("id") Integer id) {
         asignacionCursoService.deleteAsignacionById(id);
         return HttpStatus.NO_CONTENT;
     }

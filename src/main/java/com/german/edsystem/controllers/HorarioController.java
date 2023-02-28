@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -16,14 +16,14 @@ public class HorarioController {
     private final IHorarioService horarioService;
 
     @GetMapping
-    public ResponseEntity<List<Horario>> getHorarios() {
+    public ResponseEntity<Iterable<Horario>> getHorarios() {
         return new ResponseEntity<>(horarioService.getHorarios(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Horario> getHorario(@PathVariable Integer id) {
-        Horario horario = horarioService.getHorario(id);
-        if (horario == null) {
+    public ResponseEntity<Optional<Horario>> getHorarioById(@PathVariable Integer id) {
+        Optional<Horario> horario = horarioService.getHorario(id);
+        if (horario.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(horario, HttpStatus.OK);
@@ -36,15 +36,15 @@ public class HorarioController {
 
     @PutMapping
     public ResponseEntity<Horario> updateHorario(@RequestBody Horario horario) {
-        Horario existingHorario = horarioService.getHorario(horario.getIdHorario());
-        if (existingHorario == null) {
+        Optional<Horario> existingHorario = horarioService.getHorario(horario.getIdHorario());
+        if (existingHorario.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingHorario.setDescripcion(horario.getDescripcion());
-        return new ResponseEntity<>(horarioService.saveHorario(existingHorario), HttpStatus.OK);
+        existingHorario.get().setDescripcion(horario.getDescripcion());
+        return new ResponseEntity<>(horarioService.saveHorario(existingHorario.get()), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public HttpStatus deleteHorario(@PathVariable Integer id) {
+    public HttpStatus deleteHorarioById(@PathVariable Integer id) {
         horarioService.deleteHorarioById(id);
         return HttpStatus.NO_CONTENT;
     }

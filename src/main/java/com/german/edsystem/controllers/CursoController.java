@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -15,14 +15,14 @@ public class CursoController {
     private final ICursoService cursoService;
 
     @GetMapping
-    public ResponseEntity<List<Curso>> getCursos() {
+    public ResponseEntity<Iterable<Curso>> getCursos() {
         return new ResponseEntity<>(cursoService.getCursos(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Curso> getCursoById(@PathVariable("id") Integer id) {
-        Curso curso = cursoService.getCurso(id);
-        if (curso == null) {
+    public ResponseEntity<Optional<Curso>> getCursoById(@PathVariable("id") Integer id) {
+        Optional<Curso> curso = cursoService.getCurso(id);
+        if (curso.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(curso, HttpStatus.OK);
@@ -35,13 +35,13 @@ public class CursoController {
 
     @PutMapping
     public ResponseEntity<Curso> updateCurso(@RequestBody Curso curso) {
-        Curso existingCurso = cursoService.getCurso(curso.getIdCurso());
-        if (existingCurso == null) {
+        Optional<Curso> existingCurso = cursoService.getCurso(curso.getIdCurso());
+        if (existingCurso.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingCurso.setNombre(curso.getNombre());
-        existingCurso.setCapacidad(curso.getCapacidad());
-        return new ResponseEntity<>(cursoService.saveCurso(existingCurso), HttpStatus.OK);
+        existingCurso.get().setNombre(curso.getNombre());
+        existingCurso.get().setCapacidad(curso.getCapacidad());
+        return new ResponseEntity<>(cursoService.saveCurso(existingCurso.get()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
