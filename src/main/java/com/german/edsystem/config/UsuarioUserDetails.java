@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 
 public class UsuarioUserDetails implements UserDetails {
 
-    private String username;
-    private String password;
-    private List<GrantedAuthority> authorities;
+    private final String username;
+    private final String password;
+    private final List<GrantedAuthority> authorities;
 
     public UsuarioUserDetails(Usuario usuario) {
         this.username = usuario.getUsername();

@@ -4,6 +4,7 @@ import com.german.edsystem.models.Horario;
 import com.german.edsystem.service.IHorarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -30,11 +31,13 @@ public class HorarioController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Horario> createHorario(@RequestBody Horario horario) {
         return new ResponseEntity<>(horarioService.saveHorario(horario), HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Horario> updateHorario(@RequestBody Horario horario) {
         Optional<Horario> existingHorario = horarioService.getHorario(horario.getIdHorario());
         if (existingHorario.isEmpty()) {
@@ -44,6 +47,7 @@ public class HorarioController {
         return new ResponseEntity<>(horarioService.saveHorario(existingHorario.get()), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteHorarioById(@PathVariable Integer id) {
         horarioService.deleteHorarioById(id);
         return HttpStatus.NO_CONTENT;

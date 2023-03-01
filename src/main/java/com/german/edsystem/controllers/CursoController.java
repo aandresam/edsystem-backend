@@ -4,6 +4,7 @@ import com.german.edsystem.models.Curso;
 import com.german.edsystem.service.ICursoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -29,11 +30,13 @@ public class CursoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Curso> createCurso(@RequestBody Curso curso) {
         return new ResponseEntity<>(cursoService.saveCurso(curso), HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Curso> updateCurso(@RequestBody Curso curso) {
         Optional<Curso> existingCurso = cursoService.getCurso(curso.getIdCurso());
         if (existingCurso.isEmpty()) {
@@ -45,6 +48,7 @@ public class CursoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteCurso(@PathVariable("id") Integer id) {
         cursoService.deleteCursoById(id);
         return HttpStatus.NO_CONTENT;

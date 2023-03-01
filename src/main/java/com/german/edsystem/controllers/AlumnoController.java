@@ -21,7 +21,7 @@ public class AlumnoController {
         return new ResponseEntity<>(this.alumnoService.getAlumnos(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Optional<Alumno>> getAlumnoById(@PathVariable Integer id) {
         Optional<Alumno> alumno = this.alumnoService.getAlumnoById(id);
         if(alumno.isEmpty()) {
@@ -37,7 +37,7 @@ public class AlumnoController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Alumno> updateAlumno(@RequestBody Alumno alumno) {
         Optional<Alumno> existingAlumno = this.alumnoService.getAlumnoById(alumno.getId());
         if(existingAlumno.isEmpty()) {
@@ -52,6 +52,7 @@ public class AlumnoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteAlumnoById(@PathVariable Integer id) {
         this.alumnoService.deleteAlumnoById(id);
         return HttpStatus.NO_CONTENT;

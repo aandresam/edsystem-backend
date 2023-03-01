@@ -4,6 +4,7 @@ import com.german.edsystem.models.Docente;
 import com.german.edsystem.service.IDocenteService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -29,11 +30,13 @@ public class DocenteController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Docente> createDocente(@RequestBody Docente docente) {
         return new ResponseEntity<>(docenteService.saveDocente(docente), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Docente> updateDocente(@RequestBody Docente docente) {
         Optional<Docente> existingDocente = docenteService.getDocente(docente.getId());
         if (existingDocente.isEmpty()) {
@@ -48,6 +51,7 @@ public class DocenteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteDocenteById(@PathVariable Integer id) {
         docenteService.deleteDocenteById(id);
         return HttpStatus.NO_CONTENT;

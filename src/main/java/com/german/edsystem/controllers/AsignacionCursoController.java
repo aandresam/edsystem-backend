@@ -5,6 +5,7 @@ import com.german.edsystem.service.IAsignacionCursoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -30,12 +31,14 @@ public class AsignacionCursoController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<AsignacionCurso> createAsignacion(@RequestBody AsignacionCurso asignacion) {
         return new ResponseEntity<>(asignacionCursoService
                 .saveAsignacion(asignacion), HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<AsignacionCurso> updateAsignacion(@RequestBody AsignacionCurso asignacion){
         Optional<AsignacionCurso> existingAsignacion = asignacionCursoService.getAsignacion(asignacion.getIdAsignacion());
         if (existingAsignacion.isEmpty()) {
@@ -49,6 +52,7 @@ public class AsignacionCursoController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteAsignacionById(@PathVariable("id") Integer id) {
         asignacionCursoService.deleteAsignacionById(id);
         return HttpStatus.NO_CONTENT;
