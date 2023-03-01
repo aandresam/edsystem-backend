@@ -3,6 +3,7 @@ package com.german.edsystem.controllers;
 import com.german.edsystem.config.jwt.AuthenticationCredentials;
 import com.german.edsystem.config.jwt.JWTService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,7 +31,8 @@ public class AuthenticationController {
                         .authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(),
                                                                             credentials.getPassword()));
         if (!authentication.isAuthenticated()) {
-            throw new UsernameNotFoundException("Credenciales incorectas");
+            //throw new UsernameNotFoundException("Credenciales incorectas");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         String token = jwtService.generateToken(credentials.getUsername());
         HttpHeaders headers = new HttpHeaders();
