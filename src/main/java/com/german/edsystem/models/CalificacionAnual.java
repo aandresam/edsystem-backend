@@ -17,10 +17,14 @@ public class CalificacionAnual {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_asignatura", nullable = false, referencedColumnName = "id_asignatura")
     private Asignatura asignatura;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_periodo_academico", nullable = false, referencedColumnName = "id")
-    private PeriodoAcademico periodoAcademico;
+    @Column(precision = 3, nullable = true)
+    private Double periodo1;
+    @Column(precision = 3, nullable = true)
+    private Double periodo2;
+    @Column(precision = 3, nullable = true)
+    private Double periodo3;
+    @Column(precision = 3, nullable = true)
+    private Double periodo4;
 
     @Column(name = "nota_final_anual")
     private Double notaFinalAnual;

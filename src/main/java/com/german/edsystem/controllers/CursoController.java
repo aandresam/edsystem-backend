@@ -50,7 +50,11 @@ public class CursoController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteCurso(@PathVariable("id") Integer id) {
-        cursoService.deleteCursoById(id);
+        Optional<Curso> existingCurso = cursoService.getCurso(id);
+        if (existingCurso.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        cursoService.deleteCursoById(existingCurso.get().getIdCurso());
         return HttpStatus.NO_CONTENT;
     }
 }

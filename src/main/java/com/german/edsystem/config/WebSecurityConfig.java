@@ -2,7 +2,6 @@ package com.german.edsystem.config;
 
 import com.german.edsystem.config.jwt.filters.JWTAuthFilter;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

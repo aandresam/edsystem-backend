@@ -18,12 +18,12 @@ public class HorarioController {
 
     @GetMapping
     public ResponseEntity<Iterable<Horario>> getHorarios() {
-        return new ResponseEntity<>(horarioService.getHorarios(), HttpStatus.OK);
+        return new ResponseEntity<>(this.horarioService.getHorarios(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Horario>> getHorarioById(@PathVariable Integer id) {
-        Optional<Horario> horario = horarioService.getHorario(id);
+        Optional<Horario> horario = this.horarioService.getHorario(id);
         if (horario.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -33,23 +33,27 @@ public class HorarioController {
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Horario> createHorario(@RequestBody Horario horario) {
-        return new ResponseEntity<>(horarioService.saveHorario(horario), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.horarioService.saveHorario(horario), HttpStatus.CREATED);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Horario> updateHorario(@RequestBody Horario horario) {
-        Optional<Horario> existingHorario = horarioService.getHorario(horario.getIdHorario());
+        Optional<Horario> existingHorario = this.horarioService.getHorario(horario.getIdHorario());
         if (existingHorario.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         existingHorario.get().setDescripcion(horario.getDescripcion());
-        return new ResponseEntity<>(horarioService.saveHorario(existingHorario.get()), HttpStatus.OK);
+        return new ResponseEntity<>(this.horarioService.saveHorario(existingHorario.get()), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteHorarioById(@PathVariable Integer id) {
-        horarioService.deleteHorarioById(id);
+        Optional<Horario> existingHorario = this.horarioService.getHorario(id);
+        if (existingHorario.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        this.horarioService.deleteHorarioById(existingHorario.get().getIdHorario());
         return HttpStatus.NO_CONTENT;
     }
 }

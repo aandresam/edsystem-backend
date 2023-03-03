@@ -54,7 +54,11 @@ public class AlumnoController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteAlumnoById(@PathVariable Integer id) {
-        this.alumnoService.deleteAlumnoById(id);
+        Optional<Alumno> existingAlumno = this.alumnoService.getAlumnoById(id);
+        if(existingAlumno.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        this.alumnoService.deleteAlumnoById(existingAlumno.get().getId());
         return HttpStatus.NO_CONTENT;
     }
 

@@ -53,7 +53,11 @@ public class DocenteController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteDocenteById(@PathVariable Integer id) {
-        docenteService.deleteDocenteById(id);
+        Optional<Docente> existingDocente = docenteService.getDocente(id);
+        if (existingDocente.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        docenteService.deleteDocenteById(existingDocente.get().getId());
         return HttpStatus.NO_CONTENT;
     }
 }

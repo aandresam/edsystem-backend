@@ -57,7 +57,12 @@ public class AsignacionAsignaturaController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteAsignacionById(@PathVariable("id") int id){
-        asignacionAsignaturaService.deleteAsignacionById(id);
+        Optional<AsignacionAsignatura> existingAsignacion = asignacionAsignaturaService
+                .getAsignacionById(id);
+        if(existingAsignacion.isEmpty()){
+            return HttpStatus.NOT_FOUND;
+        }
+        asignacionAsignaturaService.deleteAsignacionById(existingAsignacion.get().getIdAsignacion());
         return HttpStatus.NO_CONTENT;
     }
 }

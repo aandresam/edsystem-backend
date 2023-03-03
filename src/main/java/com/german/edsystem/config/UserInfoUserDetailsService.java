@@ -12,12 +12,14 @@ import java.util.Optional;
 
 @Component
 public class UserInfoUserDetailsService implements UserDetailsService {
+
     @Autowired
     private UsuarioRepositoryJpa usuarioRepositoryJpa;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> usuario = usuarioRepositoryJpa.findByUsername(username);
         return usuario.map(UsuarioUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

@@ -21,4 +21,6 @@ public class PeriodoAcademico {
     @Column(name = "fecha_fin", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate fechaFin;
+    @Column(nullable = false)
+    private boolean isActive;
 }
