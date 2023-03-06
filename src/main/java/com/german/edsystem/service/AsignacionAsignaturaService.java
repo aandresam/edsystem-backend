@@ -25,10 +25,19 @@ public class AsignacionAsignaturaService implements IAsignacionAsignaturaService
     }
 
     @Override
-    public AsignacionAsignatura saveAsignacion(AsignacionAsignatura asignacionAsignatura) {
-        return this.asignacionAsignaturaRepository.saveAsignacion(asignacionAsignatura);
+    public AsignacionAsignatura createAsignacion(AsignacionAsignatura asignacion) {
+        return this.asignacionAsignaturaRepository.saveAsignacion(asignacion);
     }
-
+    @Override
+    public AsignacionAsignatura updateAsignacion(AsignacionAsignatura asignacion) {
+        Optional<AsignacionAsignatura> existingAsignacion = this.getAsignacionById(asignacion.getIdAsignacion());
+        if (existingAsignacion.isEmpty()) {
+            return null;
+        }
+        existingAsignacion.get().setDocente(asignacion.getDocente());
+        existingAsignacion.get().setCurso(asignacion.getCurso());
+        return this.asignacionAsignaturaRepository.saveAsignacion(existingAsignacion.get());
+    }
     @Override
     public void deleteAsignacionById(Integer id) {
         this.asignacionAsignaturaRepository.deleteAsignacionById(id);

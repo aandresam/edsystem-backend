@@ -33,18 +33,17 @@ public class HorarioController {
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Horario> createHorario(@RequestBody Horario horario) {
-        return new ResponseEntity<>(this.horarioService.saveHorario(horario), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.horarioService.createHorario(horario), HttpStatus.CREATED);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Horario> updateHorario(@RequestBody Horario horario) {
-        Optional<Horario> existingHorario = this.horarioService.getHorario(horario.getIdHorario());
-        if (existingHorario.isEmpty()) {
+        Horario updatedHorario = this.horarioService.updateHorario(horario);
+        if (updatedHorario == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingHorario.get().setDescripcion(horario.getDescripcion());
-        return new ResponseEntity<>(this.horarioService.saveHorario(existingHorario.get()), HttpStatus.OK);
+        return new ResponseEntity<>(updatedHorario, HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

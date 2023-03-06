@@ -31,7 +31,7 @@ public class DocenteService implements IDocenteService {
     }
 
     @Override
-    public Docente saveDocente(Docente docente) {
+    public Docente createDocente(Docente docente) {
         Docente savedDocente = this.docenteRepository.saveDocente(docente);
         Usuario usuario = createUserForDocente(savedDocente);
         usuario = this.usuarioService.saveUsuario(usuario);
@@ -39,13 +39,24 @@ public class DocenteService implements IDocenteService {
         savedDocente = this.docenteRepository.saveDocente(savedDocente);
         return savedDocente;
     }
-
+    @Override
+    public Docente updateDocente(Docente docente) {
+        Optional<Docente> existingDocente = this.docenteRepository.getDocenteById(docente.getId());
+        if (existingDocente.isEmpty()) {
+            return null;
+        }
+        existingDocente.get().setNombre(docente.getNombre());
+        existingDocente.get().setApellido(docente.getApellido());
+        existingDocente.get().setContacto(docente.getContacto());
+        existingDocente.get().setDomicilio(docente.getDomicilio());
+        return this.docenteRepository.saveDocente(existingDocente.get());
+    }
     @Override
     public void deleteDocenteById(Integer id) {
         this.docenteRepository.deleteDocenteById(id);
     }
 
-    public Usuario createUserForDocente(Docente docente) {
+    private Usuario createUserForDocente(Docente docente) {
         Usuario usuario = new Usuario();
         Optional<Rol> rol = this.rolService.getRolById(2);
         usuario.setUsername(docente.getContacto().getEmail());

@@ -19,12 +19,12 @@ public class AsignacionAsignaturaController {
 
     @GetMapping
     public ResponseEntity<Iterable<AsignacionAsignatura>> getAsignaciones(){
-        return new ResponseEntity<>(asignacionAsignaturaService.getAsignaciones(), HttpStatus.OK);
+        return new ResponseEntity<>(this.asignacionAsignaturaService.getAsignaciones(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<AsignacionAsignatura>> getAsignacionById(@PathVariable("id") Integer id){
-        Optional<AsignacionAsignatura> asignacion = asignacionAsignaturaService.getAsignacionById(id);
+        Optional<AsignacionAsignatura> asignacion = this.asignacionAsignaturaService.getAsignacionById(id);
         if(asignacion.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -35,29 +35,25 @@ public class AsignacionAsignaturaController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<AsignacionAsignatura> createAsignacion(
             @RequestBody AsignacionAsignatura asignacion){
-        return new ResponseEntity<>(asignacionAsignaturaService
-                .saveAsignacion(asignacion),HttpStatus.CREATED);
+        return new ResponseEntity<>(this.asignacionAsignaturaService
+                .createAsignacion(asignacion),HttpStatus.CREATED);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<AsignacionAsignatura> updateAsignacion(
-            @RequestBody AsignacionAsignatura asignacion){
-        Optional<AsignacionAsignatura> existingAsignacion = asignacionAsignaturaService
-                .getAsignacionById(asignacion.getIdAsignacion());
-        if(existingAsignacion.isEmpty()){
+                                                                @RequestBody AsignacionAsignatura asignacion){
+        AsignacionAsignatura asignacionUpdated = this.asignacionAsignaturaService.updateAsignacion(asignacion);
+        if (asignacionUpdated == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingAsignacion.get().setDocente(asignacion.getDocente());
-        existingAsignacion.get().setCurso(asignacion.getCurso());
-        return new ResponseEntity<>(asignacionAsignaturaService
-                .saveAsignacion(existingAsignacion.get()),HttpStatus.OK);
+        return new ResponseEntity<>(asignacionUpdated, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteAsignacionById(@PathVariable("id") int id){
-        Optional<AsignacionAsignatura> existingAsignacion = asignacionAsignaturaService
+        Optional<AsignacionAsignatura> existingAsignacion = this.asignacionAsignaturaService
                 .getAsignacionById(id);
         if(existingAsignacion.isEmpty()){
             return HttpStatus.NOT_FOUND;

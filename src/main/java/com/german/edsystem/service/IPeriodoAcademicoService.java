@@ -7,6 +7,7 @@ import java.util.Optional;
 public interface IPeriodoAcademicoService {
     Iterable<PeriodoAcademico> getPeriodos();
     Optional<PeriodoAcademico> getPeriodoById(Integer id);
-    PeriodoAcademico savePeriodo(PeriodoAcademico periodoAcademico);
+    PeriodoAcademico createPeriodo(PeriodoAcademico periodoAcademico);
+    PeriodoAcademico updatePeriodo(PeriodoAcademico periodoAcademico);
     void deletePeriodoById(Integer id);
 }

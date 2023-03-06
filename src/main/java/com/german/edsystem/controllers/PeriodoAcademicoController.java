@@ -28,20 +28,15 @@ public class PeriodoAcademicoController {
     }
     @PostMapping
     public ResponseEntity<PeriodoAcademico> createPeriodo(@RequestBody PeriodoAcademico periodo) {
-        return new ResponseEntity<>(this.periodoAcademicoService.savePeriodo(periodo), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.periodoAcademicoService.createPeriodo(periodo), HttpStatus.CREATED);
     }
     @PutMapping
     public ResponseEntity<PeriodoAcademico> updatePeriodo(@RequestBody PeriodoAcademico periodo) {
-        Optional<PeriodoAcademico> existingPeriodo = this.periodoAcademicoService
-                .getPeriodoById(periodo.getId());
-        if (existingPeriodo.isEmpty()){
+        PeriodoAcademico updatedPeriodo = this.periodoAcademicoService.updatePeriodo(periodo);
+        if (updatedPeriodo == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingPeriodo.get().setNombre(periodo.getNombre());
-        existingPeriodo.get().setFechaInicio(periodo.getFechaInicio());
-        existingPeriodo.get().setFechaFin(periodo.getFechaFin());
-        return new ResponseEntity<>(this.periodoAcademicoService
-                .savePeriodo(existingPeriodo.get()), HttpStatus.OK);
+        return new ResponseEntity<>(updatedPeriodo, HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     public HttpStatus deletePeriodoById(@PathVariable("id") Integer id) {

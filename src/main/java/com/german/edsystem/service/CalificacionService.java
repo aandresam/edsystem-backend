@@ -2,6 +2,7 @@ package com.german.edsystem.service;
 
 import com.german.edsystem.infrastructure.repository.CalificacionRepository;
 import com.german.edsystem.models.Calificacion;
+import com.german.edsystem.utils.Operaciones;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,33 @@ public class CalificacionService implements ICalificacionService {
     }
 
     @Override
-    public Calificacion saveCalificacion(Calificacion calificacion) {
+    public Calificacion createCalificacion(Calificacion calificacion) {
         return this.calificacionRepository.saveCalificacion(calificacion);
+    }
+    @Override
+    public Calificacion updateCalificacion(Calificacion calificacion) {
+        Optional<Calificacion> existingCalificacion = this.calificacionRepository
+                                                                .getCalificacionById(calificacion.getId());
+        if (existingCalificacion.isEmpty()) {
+            return null;
+        }
+        existingCalificacion.get().setAlumno(calificacion.getAlumno());
+        existingCalificacion.get().setDocente(calificacion.getDocente());
+        existingCalificacion.get().setPeriodoAcademico(calificacion.getPeriodoAcademico());
+        existingCalificacion.get().setAsignatura(calificacion.getAsignatura());
+        existingCalificacion.get().setNota1(calificacion.getNota1());
+        existingCalificacion.get().setNota2(calificacion.getNota2());
+        existingCalificacion.get().setNota3(calificacion.getNota3());
+        existingCalificacion.get().setNota4(calificacion.getNota4());
+        Double[] notas = {
+                existingCalificacion.get().getNota1(),
+                existingCalificacion.get().getNota2(),
+                existingCalificacion.get().getNota3(),
+                existingCalificacion.get().getNota4()
+        };
+        double notaFinal = Operaciones.calcularPromedio(notas);
+        existingCalificacion.get().setNotaDefinitiva(notaFinal);
+        return this.calificacionRepository.saveCalificacion(existingCalificacion.get());
     }
 
     @Override
@@ -32,15 +58,5 @@ public class CalificacionService implements ICalificacionService {
         this.calificacionRepository.deleteCalificacionById(id);
     }
 
-    @Override
-    public Calificacion promediarNotaDefinitiva(Calificacion calificacion) {
-        Double nota1 = calificacion.getNota1();
-        Double nota2 = calificacion.getNota2();
-        Double nota3 = calificacion.getNota3();
-        Double nota4 = calificacion.getNota4();
-        double suma = nota1 + nota2 + nota3 + nota4;
-        double notaDefinitiva = (suma == 0) ? 0 : (suma / 4);
-        calificacion.setNotaDefinitiva(notaDefinitiva);
-        return calificacion;
-    }
+
 }

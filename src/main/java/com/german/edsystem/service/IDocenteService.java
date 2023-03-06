@@ -10,7 +10,8 @@ public interface IDocenteService {
 
     Optional<Docente> getDocente(Integer id);
 
-    Docente saveDocente(Docente docente);
+    Docente createDocente(Docente docente);
+    Docente updateDocente(Docente docente);
 
     void deleteDocenteById(Integer id);
 }

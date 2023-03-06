@@ -10,7 +10,8 @@ public interface IAlumnoService {
 
     Optional<Alumno> getAlumnoById(Integer id);
 
-    Alumno saveAlumno(Alumno alumno);
+    Alumno createAlumno(Alumno alumno);
+    Alumno updateAlumno(Alumno alumno);
 
     void deleteAlumnoById(Integer id);
 }

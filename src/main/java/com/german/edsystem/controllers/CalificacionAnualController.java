@@ -32,23 +32,26 @@ public class CalificacionAnualController {
     public ResponseEntity<CalificacionAnual> createCalificacionAnual(
             @RequestBody CalificacionAnual calificacion) {
         return new ResponseEntity<>(this.calificacionAnualService
-                .saveCalificacion(calificacion), HttpStatus.CREATED);
+                .createCalificacion(calificacion), HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity<CalificacionAnual> updateCalificacionAnual(
-            @RequestBody CalificacionAnual calificacion) {
-        Optional<CalificacionAnual> existingCalificacion = this.calificacionAnualService
-                .getCalificacionById(calificacion.getId());
-        if (existingCalificacion.isEmpty()) {
+                                                        @RequestBody CalificacionAnual calificacion) {
+        CalificacionAnual updatedCalificacion = this.calificacionAnualService.updateCalificacion(calificacion);
+        if (updatedCalificacion == null) {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingCalificacion.get().setAlumno(calificacion.getAlumno());
-        existingCalificacion.get().setAsignatura(calificacion.getAsignatura());
-        existingCalificacion.get().setPeriodoAcademico(calificacion.getPeriodoAcademico());
-        CalificacionAnual promedioCalificacion = this.calificacionAnualService.promediarCalificacion(existingCalificacion.get());
-
-        return null;
+        return new ResponseEntity<>(updatedCalificacion, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public HttpStatus deleteCalificacionAnualById(@PathVariable("id") Integer id) {
+        Optional<CalificacionAnual> calificacionAnual = this.calificacionAnualService.getCalificacionById(id);
+        if (calificacionAnual.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        this.calificacionAnualService.deleteCalificacionById(calificacionAnual.get().getId());
+        return HttpStatus.OK;
+    }
 }

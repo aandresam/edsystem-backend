@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface ICalificacionAnualService {
     Iterable<CalificacionAnual> getCalificaciones();
     Optional<CalificacionAnual> getCalificacionById(Integer id);
-    CalificacionAnual saveCalificacion(CalificacionAnual calificacion);
+    CalificacionAnual createCalificacion(CalificacionAnual calificacion);
+    CalificacionAnual updateCalificacion(CalificacionAnual calificacion);
     void deleteCalificacionById(Integer id);
-    CalificacionAnual promediarCalificacion(CalificacionAnual calificacionAnual);
 }

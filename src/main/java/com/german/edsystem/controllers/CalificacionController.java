@@ -29,27 +29,15 @@ public class CalificacionController {
     }
     @PostMapping
     public ResponseEntity<Calificacion> createCalificacion(@RequestBody Calificacion calificacion){
-        return new ResponseEntity<>(this.calificacionService.saveCalificacion(calificacion), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.calificacionService.createCalificacion(calificacion), HttpStatus.CREATED);
     }
     @PutMapping
     public ResponseEntity<Calificacion> updateCalificacion(@RequestBody Calificacion calificacion){
-        Optional<Calificacion> existingCalificacion = this.calificacionService
-                .getCalificacionById(calificacion.getId());
-        if (existingCalificacion.isEmpty()){
+        Calificacion updatedCalificacion = this.calificacionService.updateCalificacion(calificacion);
+        if (updatedCalificacion == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingCalificacion.get().setAlumno(calificacion.getAlumno());
-        existingCalificacion.get().setDocente(calificacion.getDocente());
-        existingCalificacion.get().setAsignatura(calificacion.getAsignatura());
-        existingCalificacion.get().setPeriodoAcademico(calificacion.getPeriodoAcademico());
-        existingCalificacion.get().setNota1(calificacion.getNota1());
-        existingCalificacion.get().setNota2(calificacion.getNota2());
-        existingCalificacion.get().setNota3(calificacion.getNota3());
-        existingCalificacion.get().setNota4(calificacion.getNota4());
-        Calificacion calificacionPromediada = this.calificacionService
-                .promediarNotaDefinitiva(existingCalificacion.get());
-        return new ResponseEntity<>(this.calificacionService
-                .saveCalificacion(calificacionPromediada), HttpStatus.OK);
+        return new ResponseEntity<>(updatedCalificacion, HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     public HttpStatus deleteCalificacionById(@PathVariable("id") Integer id){

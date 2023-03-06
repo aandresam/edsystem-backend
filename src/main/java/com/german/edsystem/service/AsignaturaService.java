@@ -23,8 +23,18 @@ public class AsignaturaService implements IAsignaturaService {
         return this.asignaturaRepository.getAsignaturaById(id);
     }
     @Override
-    public Asignatura saveAsignatura(Asignatura asignatura) {
+    public Asignatura createAsignatura(Asignatura asignatura) {
         return this.asignaturaRepository.saveAsignatura(asignatura);
+    }
+    @Override
+    public Asignatura updateAsignatura(Asignatura asignatura) {
+        Optional<Asignatura> existingAsignatura = this.asignaturaRepository
+                                                        .getAsignaturaById(asignatura.getIdAsignatura());
+        if (existingAsignatura.isEmpty()) {
+            return null;
+        }
+        existingAsignatura.get().setNombre(asignatura.getNombre());
+        return this.asignaturaRepository.saveAsignatura(existingAsignatura.get());
     }
     @Override
     public void deleteAsignaturaById(Integer id) {

@@ -9,7 +9,8 @@ public interface IAsignaturaService {
 
     Optional<Asignatura> getAsignatura(Integer id);
 
-    Asignatura saveAsignatura(Asignatura asignatura);
+    Asignatura createAsignatura(Asignatura asignatura);
+    Asignatura updateAsignatura(Asignatura asignatura);
 
     void deleteAsignaturaById(Integer id);
 }

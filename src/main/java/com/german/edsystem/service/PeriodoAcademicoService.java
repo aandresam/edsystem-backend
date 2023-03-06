@@ -22,10 +22,22 @@ public class PeriodoAcademicoService implements IPeriodoAcademicoService {
     }
 
     @Override
-    public PeriodoAcademico savePeriodo(PeriodoAcademico periodoAcademico) {
+    public PeriodoAcademico createPeriodo(PeriodoAcademico periodoAcademico) {
         return this.periodoAcademicoRepository.savePeriodo(periodoAcademico);
     }
-
+    @Override
+    public PeriodoAcademico updatePeriodo(PeriodoAcademico periodoAcademico) {
+        Optional<PeriodoAcademico> existingPeriodo = this.periodoAcademicoRepository
+                                                                .getPeriodoById(periodoAcademico.getId());
+        if (existingPeriodo.isEmpty()) {
+            return null;
+        }
+        existingPeriodo.get().setNombre(periodoAcademico.getNombre());
+        existingPeriodo.get().setFechaInicio(periodoAcademico.getFechaInicio());
+        existingPeriodo.get().setFechaFin(periodoAcademico.getFechaFin());
+        existingPeriodo.get().setActive(periodoAcademico.isActive());
+        return this.periodoAcademicoRepository.savePeriodo(existingPeriodo.get());
+    }
     @Override
     public void deletePeriodoById(Integer id) {
         this.periodoAcademicoRepository.deletePeriodoById(id);

@@ -34,18 +34,17 @@ public class AsignaturaController {
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Asignatura> createAsignatura(@RequestBody Asignatura asignatura) {
-        return new ResponseEntity<>(asignaturaService.saveAsignatura(asignatura), HttpStatus.CREATED);
+        return new ResponseEntity<>(asignaturaService.createAsignatura(asignatura), HttpStatus.CREATED);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Asignatura> updateAsignatura(@RequestBody Asignatura asignatura) {
-        Optional<Asignatura> existingAsignatura = asignaturaService.getAsignatura(asignatura.getIdAsignatura());
-        if (existingAsignatura.isEmpty()) {
+        Asignatura updatedAsignatura = this.asignaturaService.updateAsignatura(asignatura);
+        if (updatedAsignatura == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingAsignatura.get().setNombre(asignatura.getNombre());
-        return new ResponseEntity<>(asignaturaService.saveAsignatura(existingAsignatura.get()), HttpStatus.OK);
+        return new ResponseEntity<>(updatedAsignatura, HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

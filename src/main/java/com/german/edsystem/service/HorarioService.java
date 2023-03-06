@@ -24,8 +24,17 @@ public class HorarioService implements IHorarioService {
     }
 
     @Override
-    public Horario saveHorario(Horario horario) {
+    public Horario createHorario(Horario horario) {
         return this.horarioRepository.saveHorario(horario);
+    }
+    @Override
+    public Horario updateHorario(Horario horario) {
+        Optional<Horario> existingHorario = this.horarioRepository.getHorarioById(horario.getIdHorario());
+        if (existingHorario.isEmpty()) {
+            return null;
+        }
+        existingHorario.get().setDescripcion(horario.getDescripcion());
+        return this.horarioRepository.saveHorario(existingHorario.get());
     }
 
     @Override

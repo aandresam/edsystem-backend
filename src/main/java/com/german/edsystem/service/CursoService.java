@@ -26,8 +26,18 @@ public class CursoService implements ICursoService {
     }
 
     @Override
-    public Curso saveCurso(Curso curso) {
+    public Curso createCurso(Curso curso) {
         return this.cursoRepository.saveCurso(curso);
+    }
+    @Override
+    public Curso updateCurso(Curso curso) {
+        Optional<Curso> existingCurso = this.cursoRepository.getCursoById(curso.getIdCurso());
+        if (existingCurso.isEmpty()) {
+            return null;
+        }
+        existingCurso.get().setNombre(curso.getNombre());
+        existingCurso.get().setCapacidad(curso.getCapacidad());
+        return this.cursoRepository.saveCurso(existingCurso.get());
     }
 
     @Override
