@@ -1,7 +1,8 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
 import com.german.edsystem.infrastructure.repository.PeriodoAcademicoRepository;
 import com.german.edsystem.models.PeriodoAcademico;
+import com.german.edsystem.service.IPeriodoAcademicoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,11 @@ public class PeriodoAcademicoService implements IPeriodoAcademicoService {
     }
 
     @Override
+    public PeriodoAcademico getPeriodoByIsActive() {
+        return this.periodoAcademicoRepository.findByIsActive();
+    }
+
+    @Override
     public PeriodoAcademico createPeriodo(PeriodoAcademico periodoAcademico) {
         return this.periodoAcademicoRepository.savePeriodo(periodoAcademico);
     }
@@ -38,6 +44,12 @@ public class PeriodoAcademicoService implements IPeriodoAcademicoService {
         existingPeriodo.get().setActive(periodoAcademico.isActive());
         return this.periodoAcademicoRepository.savePeriodo(existingPeriodo.get());
     }
+
+    @Override
+    public void updateNotaFinal(Double nota) {
+
+    }
+
     @Override
     public void deletePeriodoById(Integer id) {
         this.periodoAcademicoRepository.deletePeriodoById(id);

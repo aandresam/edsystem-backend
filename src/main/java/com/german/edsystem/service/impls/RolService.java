@@ -1,7 +1,8 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
 import com.german.edsystem.infrastructure.repository.RolRepository;
 import com.german.edsystem.models.Rol;
+import com.german.edsystem.service.IRolService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,8 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
 import com.german.edsystem.infrastructure.repository.AsignacionAsignaturaRepository;
 import com.german.edsystem.models.AsignacionAsignatura;
+import com.german.edsystem.service.IAsignacionAsignaturaService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

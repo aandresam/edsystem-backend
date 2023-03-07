@@ -1,9 +1,10 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
 import com.german.edsystem.infrastructure.repository.DocenteRepository;
 import com.german.edsystem.models.Docente;
 import com.german.edsystem.models.Rol;
 import com.german.edsystem.models.Usuario;
+import com.german.edsystem.service.IDocenteService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +35,7 @@ public class DocenteService implements IDocenteService {
     public Docente createDocente(Docente docente) {
         Docente savedDocente = this.docenteRepository.saveDocente(docente);
         Usuario usuario = createUserForDocente(savedDocente);
-        usuario = this.usuarioService.saveUsuario(usuario);
+        usuario = this.usuarioService.createUsuario(usuario);
         savedDocente.setUsuario(usuario);
         savedDocente = this.docenteRepository.saveDocente(savedDocente);
         return savedDocente;

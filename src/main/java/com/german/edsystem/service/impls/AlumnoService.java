@@ -1,12 +1,12 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
 import com.german.edsystem.infrastructure.repository.AlumnoRepository;
 import com.german.edsystem.models.Alumno;
 import com.german.edsystem.models.Rol;
 import com.german.edsystem.models.Usuario;
+import com.german.edsystem.service.IAlumnoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +34,7 @@ public class AlumnoService implements IAlumnoService {
     public Alumno createAlumno(Alumno alumno) {
         Alumno savedAlumno = this.alumnoRepository.saveAlumno(alumno);
         Usuario usuario = this.createUserForAlumno(savedAlumno);
-        usuario = this.usuarioService.saveUsuario(usuario);
+        usuario = this.usuarioService.createUsuario(usuario);
         savedAlumno.setUsuario(usuario);
         savedAlumno = this.alumnoRepository.saveAlumno(savedAlumno);
         return savedAlumno;

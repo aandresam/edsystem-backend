@@ -17,17 +17,13 @@ public abstract class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
     @Column(nullable = false)
     private String nombre;
-
     @Column(nullable = false)
     private String apellido;
-
     @JoinColumn(name = "id_contacto", referencedColumnName = "id_contacto", nullable = false)
     @ManyToOne(cascade = CascadeType.ALL)
     private Contacto contacto;
-
     @JoinColumn(name = "id_domicilio", referencedColumnName = "id_domicilio", nullable = false)
     @ManyToOne(cascade = CascadeType.ALL)
     private Domicilio domicilio;
@@ -41,7 +37,6 @@ public abstract class Persona {
     @OneToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
-
     @PrePersist
     public void prePersist() {
         fechaRegistro = LocalDateTime.now();

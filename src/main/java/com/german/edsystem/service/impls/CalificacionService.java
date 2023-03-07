@@ -1,7 +1,11 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
+import com.german.edsystem.infrastructure.repository.CalificacionAnualRepository;
 import com.german.edsystem.infrastructure.repository.CalificacionRepository;
+import com.german.edsystem.infrastructure.repository.PeriodoAcademicoRepository;
 import com.german.edsystem.models.Calificacion;
+import com.german.edsystem.models.PeriodoAcademico;
+import com.german.edsystem.service.ICalificacionService;
 import com.german.edsystem.utils.Operaciones;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,7 @@ import java.util.Optional;
 public class CalificacionService implements ICalificacionService {
 
     private final CalificacionRepository calificacionRepository;
+    private final PeriodoAcademicoService periodoAcademicoService;
     @Override
     public Iterable<Calificacion> getCalificaciones() {
         return this.calificacionRepository.getCalificaciones();
@@ -34,9 +39,10 @@ public class CalificacionService implements ICalificacionService {
         if (existingCalificacion.isEmpty()) {
             return null;
         }
+        PeriodoAcademico periodoActivo = this.periodoAcademicoService.getPeriodoByIsActive();
         existingCalificacion.get().setAlumno(calificacion.getAlumno());
         existingCalificacion.get().setDocente(calificacion.getDocente());
-        existingCalificacion.get().setPeriodoAcademico(calificacion.getPeriodoAcademico());
+        existingCalificacion.get().setPeriodoAcademico(periodoActivo);
         existingCalificacion.get().setAsignatura(calificacion.getAsignatura());
         existingCalificacion.get().setNota1(calificacion.getNota1());
         existingCalificacion.get().setNota2(calificacion.getNota2());

@@ -1,7 +1,9 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
 import com.german.edsystem.infrastructure.repository.CalificacionAnualRepository;
 import com.german.edsystem.models.CalificacionAnual;
+import com.german.edsystem.models.PeriodoAcademico;
+import com.german.edsystem.service.ICalificacionAnualService;
 import com.german.edsystem.utils.Operaciones;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CalificacionAnualService implements ICalificacionAnualService {
     private final CalificacionAnualRepository calificacionAnualRepository;
+    private final PeriodoAcademicoService periodoAcademicoService;
     @Override
     public Iterable<CalificacionAnual> getCalificaciones() {
         return this.calificacionAnualRepository.getCalificaciones();
@@ -33,20 +36,9 @@ public class CalificacionAnualService implements ICalificacionAnualService {
         if (existingCalificacion.isEmpty()) {
             return null;
         }
+        PeriodoAcademico periodoActivo = this.periodoAcademicoService.getPeriodoByIsActive();
         existingCalificacion.get().setAlumno(calificacion.getAlumno());
         existingCalificacion.get().setAsignatura(calificacion.getAsignatura());
-        existingCalificacion.get().setPeriodo1(calificacion.getPeriodo1());
-        existingCalificacion.get().setPeriodo2(calificacion.getPeriodo2());
-        existingCalificacion.get().setPeriodo3(calificacion.getPeriodo3());
-        existingCalificacion.get().setPeriodo4(calificacion.getPeriodo4());
-        Double[] notas = {
-                existingCalificacion.get().getPeriodo1(),
-                existingCalificacion.get().getPeriodo2(),
-                existingCalificacion.get().getPeriodo3(),
-                existingCalificacion.get().getPeriodo4()
-        };
-        double notaFinal = Operaciones.calcularPromedio(notas);
-        existingCalificacion.get().setNotaFinalAnual(notaFinal);
         return this.calificacionAnualRepository.saveCalificacion(existingCalificacion.get());
     }
     @Override

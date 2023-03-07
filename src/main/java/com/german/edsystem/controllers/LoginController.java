@@ -31,7 +31,7 @@ public class LoginController {
                                                                             credentials.getPassword()));
         if (!authentication.isAuthenticated()) {
             //throw new UsernameNotFoundException("Credenciales incorectas");
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String token = jwtService.generateToken(credentials.getUsername());
         HttpHeaders headers = new HttpHeaders();

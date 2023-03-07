@@ -28,6 +28,11 @@ public class PeriodoAcademicoRepositoryImpl implements PeriodoAcademicoRepositor
     }
 
     @Override
+    public PeriodoAcademico findByIsActive() {
+        return this.periodoAcademicoRepositoryJpa.findByIsActive();
+    }
+
+    @Override
     public void deletePeriodoById(Integer id) {
         this.periodoAcademicoRepositoryJpa.deleteById(id);
     }
