@@ -33,28 +33,27 @@ public class AlumnoController {
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Alumno> createAlumno(@RequestBody Alumno alumno) {
-        return new ResponseEntity<>(this.alumnoService.saveAlumno(alumno), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.alumnoService.createAlumno(alumno), HttpStatus.CREATED);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Alumno> updateAlumno(@RequestBody Alumno alumno) {
-        Optional<Alumno> existingAlumno = this.alumnoService.getAlumnoById(alumno.getId());
-        if(existingAlumno.isEmpty()) {
+        Alumno updatedAlumno = this.alumnoService.updateAlumno(alumno);
+        if(updatedAlumno == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingAlumno.get().setNombre(alumno.getNombre());
-        existingAlumno.get().setApellido(alumno.getApellido());
-        existingAlumno.get().setContacto(alumno.getContacto());
-        existingAlumno.get().setDomicilio(alumno.getDomicilio());
-        existingAlumno.get().setFechaNacimiento(alumno.getFechaNacimiento());
-        return new ResponseEntity<>(this.alumnoService.saveAlumno(existingAlumno.get()), HttpStatus.OK);
+        return new ResponseEntity<>(updatedAlumno, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteAlumnoById(@PathVariable Integer id) {
-        this.alumnoService.deleteAlumnoById(id);
+        Optional<Alumno> existingAlumno = this.alumnoService.getAlumnoById(id);
+        if(existingAlumno.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        this.alumnoService.deleteAlumnoById(existingAlumno.get().getId());
         return HttpStatus.NO_CONTENT;
     }
 

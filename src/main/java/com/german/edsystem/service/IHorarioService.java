@@ -9,7 +9,8 @@ public interface IHorarioService {
 
     Optional<Horario> getHorario(Integer id);
 
-    Horario saveHorario(Horario horario);
+    Horario createHorario(Horario horario);
+    Horario updateHorario(Horario horario);
 
     void deleteHorarioById(Integer id);
 }

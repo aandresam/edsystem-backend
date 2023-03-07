@@ -1,9 +1,10 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
 import com.german.edsystem.infrastructure.repository.AlumnoRepository;
 import com.german.edsystem.models.Alumno;
 import com.german.edsystem.models.Rol;
 import com.german.edsystem.models.Usuario;
+import com.german.edsystem.service.IAlumnoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,20 +31,32 @@ public class AlumnoService implements IAlumnoService {
         return this.alumnoRepository.getAlumnoById(id);
     }
     @Override
-    public Alumno saveAlumno(Alumno alumno) {
+    public Alumno createAlumno(Alumno alumno) {
         Alumno savedAlumno = this.alumnoRepository.saveAlumno(alumno);
-        Usuario usuario = createUserForAlumno(savedAlumno);
-        usuario = this.usuarioService.saveUsuario(usuario);
+        Usuario usuario = this.createUserForAlumno(savedAlumno);
+        usuario = this.usuarioService.createUsuario(usuario);
         savedAlumno.setUsuario(usuario);
         savedAlumno = this.alumnoRepository.saveAlumno(savedAlumno);
         return savedAlumno;
+    }
+    @Override
+    public Alumno updateAlumno(Alumno alumno) {
+        Optional<Alumno> existingAlumno = this.alumnoRepository.getAlumnoById(alumno.getId());
+        if (existingAlumno.isEmpty()) {
+            return null;
+        }
+        existingAlumno.get().setNombre(alumno.getNombre());
+        existingAlumno.get().setApellido(alumno.getApellido());
+        existingAlumno.get().setContacto(alumno.getContacto());
+        existingAlumno.get().setDomicilio(alumno.getDomicilio());
+        return this.alumnoRepository.saveAlumno(existingAlumno.get());
     }
     @Override
     public void deleteAlumnoById(Integer id) {
         this.alumnoRepository.deleteAlumnoById(id);
     }
 
-    public Usuario createUserForAlumno(Alumno alumno) {
+    private Usuario createUserForAlumno(Alumno alumno) {
         Usuario usuario = new Usuario();
         Optional<Rol> rol = this.rolService.getRolById(3);
         usuario.setUsername(alumno.getContacto().getEmail());

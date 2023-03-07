@@ -32,28 +32,27 @@ public class DocenteController {
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Docente> createDocente(@RequestBody Docente docente) {
-        return new ResponseEntity<>(docenteService.saveDocente(docente), HttpStatus.CREATED);
+        return new ResponseEntity<>(docenteService.createDocente(docente), HttpStatus.CREATED);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Docente> updateDocente(@RequestBody Docente docente) {
-        Optional<Docente> existingDocente = docenteService.getDocente(docente.getId());
-        if (existingDocente.isEmpty()) {
+        Docente updatedDocente = this.docenteService.updateDocente(docente);
+        if (updatedDocente == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        existingDocente.get().setNombre(docente.getNombre());
-        existingDocente.get().setApellido(docente.getApellido());
-        existingDocente.get().setContacto(docente.getContacto());
-        existingDocente.get().setDomicilio(docente.getDomicilio());
-        existingDocente.get().setFechaNacimiento(docente.getFechaNacimiento());
-        return new ResponseEntity<>(docenteService.saveDocente(existingDocente.get()), HttpStatus.OK);
+        return new ResponseEntity<>(updatedDocente, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public HttpStatus deleteDocenteById(@PathVariable Integer id) {
-        docenteService.deleteDocenteById(id);
+        Optional<Docente> existingDocente = docenteService.getDocente(id);
+        if (existingDocente.isEmpty()) {
+            return HttpStatus.NOT_FOUND;
+        }
+        docenteService.deleteDocenteById(existingDocente.get().getId());
         return HttpStatus.NO_CONTENT;
     }
 }

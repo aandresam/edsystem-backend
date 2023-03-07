@@ -10,7 +10,8 @@ public interface IAsignacionAsignaturaService {
 
     Optional<AsignacionAsignatura> getAsignacionById(Integer id);
 
-    AsignacionAsignatura saveAsignacion(AsignacionAsignatura asignacionAsignatura);
+    AsignacionAsignatura createAsignacion(AsignacionAsignatura asignacionAsignatura);
+    AsignacionAsignatura updateAsignacion(AsignacionAsignatura asignacionAsignatura);
 
     void deleteAsignacionById(Integer asignacionAsignatura);
 }

@@ -9,7 +9,8 @@ public interface ICursoService {
 
     Optional<Curso> getCurso(Integer id);
 
-    Curso saveCurso(Curso curso);
+    Curso createCurso(Curso curso);
+    Curso updateCurso(Curso curso);
 
     void deleteCursoById(Integer id);
 }

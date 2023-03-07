@@ -1,7 +1,8 @@
-package com.german.edsystem.service;
+package com.german.edsystem.service.impls;
 
 import com.german.edsystem.infrastructure.repository.AsignacionCursoRepository;
 import com.german.edsystem.models.AsignacionCurso;
+import com.german.edsystem.service.IAsignacionCursoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,20 @@ public class AsignacionCursoService implements IAsignacionCursoService {
         return this.asignacionCursoRepository.getAsignacionById(id);
     }
     @Override
-    public AsignacionCurso saveAsignacion(AsignacionCurso asignacion) {
+    public AsignacionCurso createAsignacion(AsignacionCurso asignacion) {
         return this.asignacionCursoRepository.saveAsignacion(asignacion);
+    }
+    @Override
+    public AsignacionCurso updateAsignacion(AsignacionCurso asignacion){
+        Optional<AsignacionCurso> existingAsignacion = this.asignacionCursoRepository
+                                                                    .getAsignacionById(asignacion.getIdAsignacion());
+        if (existingAsignacion.isEmpty()) {
+            return null;
+        }
+        existingAsignacion.get().setDocente(asignacion.getDocente());
+        existingAsignacion.get().setAlumno(asignacion.getAlumno());
+        existingAsignacion.get().setHorario(asignacion.getHorario());
+        return this.asignacionCursoRepository.saveAsignacion(existingAsignacion.get());
     }
     @Override
     public void deleteAsignacionById(Integer id) {
